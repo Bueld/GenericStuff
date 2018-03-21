@@ -47,6 +47,7 @@ public class Tree extends Application {
 		tree = new Pane();
 		tree.setBackground(null);
 		
+		
 		controls = new GridPane();
 
 		renderB = new Button("Render new Stage");
@@ -161,7 +162,7 @@ public class Tree extends Application {
 	@Override
 	public void start(final Stage stage) {
 		borderPane = new BorderPane();
-		borderPane.setRight(tree);
+		borderPane.setCenter(tree);
 		borderPane.setLeft(controls);
 		borderPane.setBackground(null);
 		scene = new Scene(borderPane, 666, 666, true, SceneAntialiasing.BALANCED);
