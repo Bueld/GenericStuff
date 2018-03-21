@@ -31,7 +31,6 @@ public class Branch extends Polygon {
 				-start.getX()-vec.getY(),-start.getY()+vec.getX(),
 				-end.getX()-vec.getY(),-end.getY()+vec.getX(),
 				-end.getX()+vec.getY(),-end.getY()-vec.getX(),
-				//-start.getX()+vec.getY(),-start.getY()-vec.getX()
 		};
 		
 		this.getPoints().addAll(points);
