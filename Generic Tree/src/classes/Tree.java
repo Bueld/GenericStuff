@@ -212,23 +212,25 @@ public class Tree extends Application {
 		stats.setHgap(15);
 		stats.setVgap(25);
 
+		Font f = new Font("Roboto Black", 14);
+
 		branchCN = new Label("Branches generated:");
-		branchCN.setFont(new Font("Roboto Black", 14));
+		branchCN.setFont(f);
 		branchCN.setTextFill(Color.WHITESMOKE);
 		branchC = new Label(branchesCount + "");
-		branchC.setFont(new Font("Roboto Black", 14));
+		branchC.setFont(f);
 		branchC.setTextFill(Color.WHITESMOKE);
 		leafCN = new Label("Leaves generated:");
-		leafCN.setFont(new Font("Roboto Black", 14));
+		leafCN.setFont(f);
 		leafCN.setTextFill(Color.WHITESMOKE);
 		leafC = new Label(leafCount + "");
-		leafC.setFont(new Font("Roboto Black", 14));
+		leafC.setFont(f);
 		leafC.setTextFill(Color.WHITESMOKE);
 		totalEverN = new Label("Total generated:");
-		totalEverN.setFont(new Font("Roboto Black", 14));
+		totalEverN.setFont(f);
 		totalEverN.setTextFill(Color.WHITESMOKE);
 		totalEver = new Label(totalEv + "");
-		totalEver.setFont(new Font("Roboto Black", 14));
+		totalEver.setFont(f);
 		totalEver.setTextFill(Color.WHITESMOKE);
 
 		stats.add(branchCN, 0, 0);
