@@ -6,12 +6,15 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -52,6 +55,11 @@ public class Tree extends Application {
 	private Label branchCN;
 	private Label totalEver;
 	private Label totalEverN;
+	
+	private CheckBox alphC;
+	private CheckBox lengthC;
+	private CheckBox thickC;
+	private CheckBox colorC;
 
 	private double stagesCount = 0;
 	private double leavesCount = 0;
@@ -101,7 +109,7 @@ public class Tree extends Application {
 		});
 
 		minVal = new TextField("2");
-		minVal.setPrefSize(200, 30);
+		minVal.setPrefSize(90, 30);
 		minVal.textProperty().addListener(new ChangeListener<String>() {
 
 			@Override
@@ -118,8 +126,8 @@ public class Tree extends Application {
 
 		});
 
-		maxVal = new TextField("5");
-		maxVal.setPrefSize(200, 30);
+		maxVal = new TextField("4");
+		maxVal.setPrefSize(90, 30);
 		maxVal.textProperty().addListener(new ChangeListener<String>() {
 
 			@Override
@@ -186,21 +194,57 @@ public class Tree extends Application {
 		leafThick.setMinorTickCount(4);
 		leafThick.setMajorTickUnit(8);
 		leafThick.setSnapToTicks(true);
+		
+		Font f = new Font("Roboto Black", 12);
+		Color c = Color.WHITESMOKE;
+		
+		alphC = new CheckBox("Alpha Static");
+		alphC.setFont(f);
+		alphC.setTextFill(c);
+		alphC.setSelected(true);
+		colorC = new CheckBox("Color Static");
+		colorC.setFont(f);
+		colorC.setTextFill(c);
+		lengthC = new CheckBox("Length Static");
+		lengthC.setFont(f);
+		lengthC.setTextFill(c);
+		thickC = new CheckBox("Thickness Static");
+		thickC.setFont(f);
+		thickC.setTextFill(c);
+		
+		
 
 		controls.setPadding(new Insets(20));
 		controls.setHgap(15);
 		controls.setVgap(25);
+		
+		//controls.setGridLinesVisible(true);
+		
+		
 
 		controls.add(renderB, 0, 0);
 		controls.add(renderL, 0, 1);
 		controls.add(clear, 0, 2);
 		controls.add(minVal, 0, 3);
-		controls.add(maxVal, 0, 4);
-		controls.add(length, 0, 5);
-		controls.add(thickness, 0, 6);
-		controls.add(color, 0, 7);
-		controls.add(alpha, 0, 8);
-		controls.add(leafThick, 0, 9);
+		controls.add(maxVal, 1, 3);
+		controls.add(length, 0, 4);
+		controls.add(thickness, 0, 5);
+		controls.add(color, 0, 6);
+		controls.add(alpha, 0, 7);
+		controls.add(leafThick, 0, 8);
+		controls.add(colorC, 0, 9);
+		controls.add(alphC, 1, 9);
+		controls.add(lengthC, 0, 10);
+		controls.add(thickC, 1, 10);
+		
+		GridPane.setConstraints(renderB, 0, 0,2,1,HPos.CENTER,VPos.CENTER);
+		GridPane.setConstraints(renderL, 0, 1,2,1,HPos.CENTER,VPos.CENTER);
+		GridPane.setConstraints(clear, 0, 2,2,1,HPos.CENTER,VPos.CENTER);
+		GridPane.setConstraints(length, 0, 4,2,1);
+		GridPane.setConstraints(thickness, 0, 5,2,1);
+		GridPane.setConstraints(color, 0, 6,2,1);
+		GridPane.setConstraints(alpha, 0, 7,2,1);
+		GridPane.setConstraints(leafThick, 0, 8,2,1);
 
 		thickness.setValue(thickness.getMax());
 		color.setValue(color.getMax());
@@ -212,26 +256,26 @@ public class Tree extends Application {
 		stats.setHgap(15);
 		stats.setVgap(25);
 
-		Font f = new Font("Roboto Black", 14);
+		
 
 		branchCN = new Label("Branches generated:");
 		branchCN.setFont(f);
-		branchCN.setTextFill(Color.WHITESMOKE);
+		branchCN.setTextFill(c);
 		branchC = new Label(branchesCount + "");
 		branchC.setFont(f);
-		branchC.setTextFill(Color.WHITESMOKE);
+		branchC.setTextFill(c);
 		leafCN = new Label("Leaves generated:");
 		leafCN.setFont(f);
-		leafCN.setTextFill(Color.WHITESMOKE);
+		leafCN.setTextFill(c);
 		leafC = new Label(leafCount + "");
 		leafC.setFont(f);
-		leafC.setTextFill(Color.WHITESMOKE);
+		leafC.setTextFill(c);
 		totalEverN = new Label("Total generated:");
 		totalEverN.setFont(f);
-		totalEverN.setTextFill(Color.WHITESMOKE);
+		totalEverN.setTextFill(c);
 		totalEver = new Label(totalEv + "");
 		totalEver.setFont(f);
-		totalEver.setTextFill(Color.WHITESMOKE);
+		totalEver.setTextFill(c);
 
 		stats.add(branchCN, 0, 0);
 		stats.add(branchC, 1, 0);
@@ -278,10 +322,18 @@ public class Tree extends Application {
 			}
 		}
 		try {
-			color.setValue(color.getValue() - 8);
-			thickness.setValue(thickness.getValue() - 0.5);
-			alpha.setValue(alpha.getValue() - 8);
-			length.setValue(length.getValue() - 15);
+			if (!colorC.isSelected()) {
+				color.setValue(color.getValue() - 8);
+			}
+			if (!thickC.isSelected()) {
+				thickness.setValue(thickness.getValue() - 0.5);
+			}
+			if (!alphC.isSelected()) {
+				alpha.setValue(alpha.getValue() - 8);
+			}
+			if (!lengthC.isSelected()) {
+				length.setValue(length.getValue() - 15);
+			}
 		} catch (Exception e) {
 		}
 
@@ -300,8 +352,7 @@ public class Tree extends Application {
 
 		min = Integer.parseInt(minVal.getText());
 		max = Integer.parseInt(maxVal.getText());
-		alph = alpha.getValue() / 100;
-		Color c = Color.hsb(color.getValue(), 1, 1, alph);
+		Color c = Color.hsb(color.getValue(), 1, 1, 0.5);
 		leavesThick = leafThick.getValue();
 
 		double buffC = stagesCount + leavesCount;
@@ -325,7 +376,9 @@ public class Tree extends Application {
 			}
 		}
 		try {
-			color.setValue(color.getValue() - 8);
+			if (!colorC.isSelected()) {
+				color.setValue(color.getValue() - 8);
+			}
 		} catch (Exception e) {
 		}
 
