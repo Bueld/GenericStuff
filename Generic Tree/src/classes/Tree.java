@@ -164,6 +164,16 @@ public class Tree extends Application {
 		color.setMajorTickUnit(60);
 		color.setBlockIncrement(2);
 		color.setSnapToTicks(true);
+		color.valueProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				if(Double.parseDouble(arg2.toString()) <= color.getMin()) {
+					color.setValue(color.getMax());
+				}
+			}
+			
+		});
 
 		alpha = new Slider();
 		alpha.setMin(0);
@@ -256,6 +266,7 @@ public class Tree extends Application {
 		stats.setHgap(15);
 		stats.setVgap(25);
 
+		f = new Font("Roboto Black", 16);
 		
 
 		branchCN = new Label("Branches generated:");
