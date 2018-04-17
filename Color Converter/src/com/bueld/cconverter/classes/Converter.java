@@ -7,12 +7,12 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -25,7 +25,11 @@ public class Converter extends Application {
 	private Scene scene;
 
 	private GridPane controls;
-	private StackPane translation;
+	private GridPane translation;
+
+	private GridPane translatedRects;
+
+	private TextArea input;
 
 	private int[] r;
 	private int[] g;
@@ -40,6 +44,8 @@ public class Converter extends Application {
 		createControls();
 
 		initialRefresh();
+
+		initInput();
 	}
 
 	private void createControls() {
@@ -204,6 +210,91 @@ public class Converter extends Application {
 						g[GridPane.getRowIndex(buff) - 1], b[GridPane.getRowIndex(buff) - 1]));
 			}
 		}
+	}
+
+	private void initInput() {
+
+		input = new TextArea();
+		input.setPrefSize(400, 300);
+
+		input.textProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+				translate(input.getText());
+				
+			}
+		});
+
+		translatedRects = new GridPane();
+		translatedRects.setPadding(new Insets(12));
+		translatedRects.setHgap(2);
+		translatedRects.setVgap(1);
+
+		translation = new GridPane();
+
+		translation.setVgap(12);
+		translation.setHgap(12);
+		translation.setPadding(new Insets(24));
+
+		translation.add(input, 0, 0);
+		translation.add(translatedRects, 0, 1);
+	}
+
+	private void translate(String str) {
+		
+
+		translatedRects.getChildren().clear();
+		
+		str.toUpperCase();
+
+		int coords[] = new int[2];
+
+		coords[0] = 0;
+		coords[1] = 0;
+
+		for (int i = 0; i < str.length(); i++) {
+			switch (str.substring(i, i + 1)) {
+			case " ":
+				coords[0]++;
+				break;
+			default:
+				if (str.substring(i, i + 1).hashCode() == 10) {
+					coords[0] = 0;
+					coords[1]++;
+				} else {
+					translatedRects.add(getColoredRect(str.substring(i, i + 1)), coords[0], coords[1]);
+					coords[0]++;
+				}
+				break;
+			}
+		}
+
+	}
+
+	private Rectangle getColoredRect(String str) {
+
+		Rectangle r = new Rectangle();
+		r.setWidth(20);
+		r.setHeight(20);
+
+		for (Node buff : controls.getChildren()) {
+			if (buff instanceof Text ) {
+				if(((Text)buff).getText().length() == 1) {
+					if(((Text)buff).getText().equals(str)) {
+						for (Node buff2 : controls.getChildren()) {
+							if (buff2 instanceof Rectangle && GridPane.getRowIndex(buff).equals(GridPane.getColumnIndex(buff2))) {
+								r.setFill(((Rectangle)buff2).getFill());
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return r;
+
 	}
 
 	@Override
