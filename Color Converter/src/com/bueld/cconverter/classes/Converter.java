@@ -223,7 +223,7 @@ public class Converter extends Application {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
 				translate(input.getText());
-				
+
 			}
 		});
 
@@ -243,11 +243,10 @@ public class Converter extends Application {
 	}
 
 	private void translate(String str) {
-		
 
 		translatedRects.getChildren().clear();
-		
-		str.toUpperCase();
+
+		str = str.toUpperCase();
 
 		int coords[] = new int[2];
 
@@ -280,12 +279,14 @@ public class Converter extends Application {
 		r.setHeight(20);
 
 		for (Node buff : controls.getChildren()) {
-			if (buff instanceof Text ) {
-				if(((Text)buff).getText().length() == 1) {
-					if(((Text)buff).getText().equals(str)) {
+			if (buff instanceof Text) {
+				if (((Text) buff).getText().length() == 1) {
+
+					if (((Text) buff).getText().equals(str)) {
 						for (Node buff2 : controls.getChildren()) {
-							if (buff2 instanceof Rectangle && GridPane.getRowIndex(buff).equals(GridPane.getColumnIndex(buff2))) {
-								r.setFill(((Rectangle)buff2).getFill());
+							if (buff2 instanceof Rectangle
+									&& GridPane.getRowIndex(buff).equals(GridPane.getRowIndex(buff2))) {
+								r.setFill(((Rectangle) buff2).getFill());
 							}
 						}
 					}
