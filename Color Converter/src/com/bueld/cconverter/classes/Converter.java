@@ -1,6 +1,5 @@
 package com.bueld.cconverter.classes;
 
-import java.awt.image.RenderedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -13,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -41,6 +41,7 @@ public class Converter extends Application {
 	private TextArea input;
 
 	private Button save;
+	private Button saveTable;
 
 	private int[] r;
 	private int[] g;
@@ -131,6 +132,7 @@ public class Converter extends Application {
 
 			controls.add(tf, i + 1, row);
 		}
+		
 	}
 
 	private void setNewWorth(int column, int row, int worth) {
@@ -241,7 +243,7 @@ public class Converter extends Application {
 		translatedRects = new GridPane();
 		translatedRects.setPadding(new Insets(12));
 		translatedRects.setHgap(2);
-		translatedRects.setVgap(1);
+		translatedRects.setVgap(5);
 
 		translation = new GridPane();
 
@@ -252,11 +254,17 @@ public class Converter extends Application {
 		translation.add(input, 0, 0);
 		translation.add(translatedRects, 0, 1);
 
-		save = new Button("Save as PNG");
+		save = new Button("Save Writing as PNG");
 		save.setOnAction(e -> {
 			saveAsPng(translatedRects);
 		});
 		translation.add(save, 0, 2);
+
+		saveTable = new Button("Save Table as PNG");
+		saveTable.setOnAction(e -> {
+			saveAsPng(controls);
+		});
+		translation.add(saveTable, 0, 3);
 	}
 
 	private void translate(String str) {
@@ -326,12 +334,13 @@ public class Converter extends Application {
 
 		if (f != null) {
 			try {
-				WritableImage wImage = new WritableImage((int) gP.getWidth() + 20, (int) gP.getHeight() + 20);
-				gP.snapshot(null, wImage);
 
-				RenderedImage renderedImage = SwingFXUtils.fromFXImage(wImage, null);
+				SnapshotParameters sSP = new SnapshotParameters();
+				sSP.setFill(Color.TRANSPARENT);
 
-				ImageIO.write(renderedImage, "png", f);
+				WritableImage wImage = gP.snapshot(sSP, null);
+
+				ImageIO.write(SwingFXUtils.fromFXImage(wImage, null), "png", f);
 
 			} catch (Exception e) {
 				System.out.println("Save failed");
