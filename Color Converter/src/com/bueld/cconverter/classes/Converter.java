@@ -1,15 +1,23 @@
 package com.bueld.cconverter.classes;
 
+import java.awt.image.RenderedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -17,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class Converter extends Application {
@@ -30,6 +39,8 @@ public class Converter extends Application {
 	private GridPane translatedRects;
 
 	private TextArea input;
+
+	private Button save;
 
 	private int[] r;
 	private int[] g;
@@ -240,6 +251,12 @@ public class Converter extends Application {
 
 		translation.add(input, 0, 0);
 		translation.add(translatedRects, 0, 1);
+
+		save = new Button("Save as PNG");
+		save.setOnAction(e -> {
+			saveAsPng(translatedRects);
+		});
+		translation.add(save, 0, 2);
 	}
 
 	private void translate(String str) {
@@ -296,6 +313,31 @@ public class Converter extends Application {
 
 		return r;
 
+	}
+
+	private void saveAsPng(GridPane gP) {
+
+		FileChooser fChooser = new FileChooser();
+
+		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files (*.PNG)", ".PNG"));
+		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("png files (*.png)", ".png"));
+
+		File f = fChooser.showSaveDialog(null);
+
+		if (f != null) {
+			try {
+				WritableImage wImage = new WritableImage((int) gP.getWidth() + 20, (int) gP.getHeight() + 20);
+				gP.snapshot(null, wImage);
+
+				RenderedImage renderedImage = SwingFXUtils.fromFXImage(wImage, null);
+
+				ImageIO.write(renderedImage, "png", f);
+
+			} catch (Exception e) {
+				System.out.println("Save failed");
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override

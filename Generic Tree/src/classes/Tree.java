@@ -410,7 +410,7 @@ public class Tree extends Application {
 		borderPane.setRight(stats);
 		borderPane.setBackground(null);
 		scene = new Scene(borderPane, 666, 666, true, SceneAntialiasing.BALANCED);
-		scene.setFill(Color.rgb(30, 6, 40));
+		scene.setFill(Color.rgb(255, 255, 255));
 		stage.setScene(scene);
 		stage.setTitle("Generic Tree");
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("../img/icon.png")));
