@@ -8,7 +8,6 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -20,7 +19,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -329,8 +327,8 @@ public class Converter extends Application {
 
 		FileChooser fChooser = new FileChooser();
 
-		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files (*.PNG)", ".PNG"));
-		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("png files (*.png)", ".png"));
+		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files (*.PNG)", "*.PNG"));
+		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("png files (*.png)", "*.png"));
 
 		File f = fChooser.showSaveDialog(null);
 
@@ -367,16 +365,17 @@ public class Converter extends Application {
 		} catch (Exception e) {
 		}
 
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent e) {
-				if (e.getCode() == KeyCode.F11) {
-					stage.setFullScreen(!stage.isFullScreen());
-				}
-
+		scene.setOnKeyPressed(e -> {
+			if (e.getCode() == KeyCode.F11) {
+				stage.setFullScreen(!stage.isFullScreen());
 			}
+		});
 
+		input.setOnKeyPressed(e -> {
+
+			if (e.getCode() == KeyCode.F11) {
+				stage.setFullScreen(!stage.isFullScreen());
+			}
 		});
 
 		stage.show();

@@ -418,8 +418,8 @@ public class Tree extends Application {
 
 		FileChooser fChooser = new FileChooser();
 
-		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files (*.PNG)", ".PNG"));
-		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("png files (*.png)", ".png"));
+		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files (*.PNG)", "*.PNG"));
+		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("png files (*.png)", "*.png"));
 
 		File f = fChooser.showSaveDialog(null);
 
