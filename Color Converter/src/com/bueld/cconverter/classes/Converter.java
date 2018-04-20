@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -19,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -132,7 +134,7 @@ public class Converter extends Application {
 
 			controls.add(tf, i + 1, row);
 		}
-		
+
 	}
 
 	private void setNewWorth(int column, int row, int worth) {
@@ -365,10 +367,16 @@ public class Converter extends Application {
 		} catch (Exception e) {
 		}
 
-		scene.setOnKeyPressed(e -> {
-			if (e.getCode() == KeyCode.F11) {
-				stage.setFullScreen(!stage.isFullScreen());
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent e) {
+				if (e.getCode() == KeyCode.F11) {
+					stage.setFullScreen(!stage.isFullScreen());
+				}
+
 			}
+
 		});
 
 		stage.show();

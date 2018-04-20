@@ -1,10 +1,14 @@
 package classes;
 
 import java.awt.Point;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -13,18 +17,21 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class Tree extends Application {
@@ -39,6 +46,8 @@ public class Tree extends Application {
 	private Button renderB;
 	private Button renderL;
 	private Button clear;
+
+	private Button save;
 
 	private TextField minVal;
 	private TextField maxVal;
@@ -55,7 +64,7 @@ public class Tree extends Application {
 	private Label branchCN;
 	private Label totalEver;
 	private Label totalEverN;
-	
+
 	private CheckBox alphC;
 	private CheckBox lengthC;
 	private CheckBox thickC;
@@ -168,11 +177,11 @@ public class Tree extends Application {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				if(Double.parseDouble(arg2.toString()) <= color.getMin()) {
+				if (Double.parseDouble(arg2.toString()) <= color.getMin()) {
 					color.setValue(color.getMax());
 				}
 			}
-			
+
 		});
 
 		alpha = new Slider();
@@ -204,10 +213,10 @@ public class Tree extends Application {
 		leafThick.setMinorTickCount(4);
 		leafThick.setMajorTickUnit(8);
 		leafThick.setSnapToTicks(true);
-		
+
 		Font f = new Font("Roboto Black", 12);
 		Color c = Color.WHITESMOKE;
-		
+
 		alphC = new CheckBox("Alpha Static");
 		alphC.setFont(f);
 		alphC.setTextFill(c);
@@ -221,16 +230,18 @@ public class Tree extends Application {
 		thickC = new CheckBox("Thickness Static");
 		thickC.setFont(f);
 		thickC.setTextFill(c);
-		
-		
+
+		save = new Button("Save Tree as PNG");
+		save.setPrefSize(200, 30);
+		save.setOnAction(e -> {
+			saveAsPng(tree);
+		});
 
 		controls.setPadding(new Insets(20));
 		controls.setHgap(15);
 		controls.setVgap(25);
-		
-		//controls.setGridLinesVisible(true);
-		
-		
+
+		// controls.setGridLinesVisible(true);
 
 		controls.add(renderB, 0, 0);
 		controls.add(renderL, 0, 1);
@@ -246,15 +257,17 @@ public class Tree extends Application {
 		controls.add(alphC, 1, 9);
 		controls.add(lengthC, 0, 10);
 		controls.add(thickC, 1, 10);
-		
-		GridPane.setConstraints(renderB, 0, 0,2,1,HPos.CENTER,VPos.CENTER);
-		GridPane.setConstraints(renderL, 0, 1,2,1,HPos.CENTER,VPos.CENTER);
-		GridPane.setConstraints(clear, 0, 2,2,1,HPos.CENTER,VPos.CENTER);
-		GridPane.setConstraints(length, 0, 4,2,1);
-		GridPane.setConstraints(thickness, 0, 5,2,1);
-		GridPane.setConstraints(color, 0, 6,2,1);
-		GridPane.setConstraints(alpha, 0, 7,2,1);
-		GridPane.setConstraints(leafThick, 0, 8,2,1);
+		controls.add(save, 0, 11);
+
+		GridPane.setConstraints(renderB, 0, 0, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(renderL, 0, 1, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(clear, 0, 2, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(length, 0, 4, 2, 1);
+		GridPane.setConstraints(thickness, 0, 5, 2, 1);
+		GridPane.setConstraints(color, 0, 6, 2, 1);
+		GridPane.setConstraints(alpha, 0, 7, 2, 1);
+		GridPane.setConstraints(leafThick, 0, 8, 2, 1);
+		GridPane.setConstraints(save, 0, 11, 2, 1, HPos.CENTER, VPos.CENTER);
 
 		thickness.setValue(thickness.getMax());
 		color.setValue(color.getMax());
@@ -267,7 +280,6 @@ public class Tree extends Application {
 		stats.setVgap(25);
 
 		f = new Font("Roboto Black", 16);
-		
 
 		branchCN = new Label("Branches generated:");
 		branchCN.setFont(f);
@@ -402,6 +414,32 @@ public class Tree extends Application {
 		totalEver.setText("" + totalEv);
 	}
 
+	private void saveAsPng(Group g) {
+
+		FileChooser fChooser = new FileChooser();
+
+		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files (*.PNG)", ".PNG"));
+		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("png files (*.png)", ".png"));
+
+		File f = fChooser.showSaveDialog(null);
+
+		if (f != null) {
+			try {
+
+				SnapshotParameters sSP = new SnapshotParameters();
+				sSP.setFill(Color.TRANSPARENT);
+
+				WritableImage wImage = g.snapshot(sSP, null);
+
+				ImageIO.write(SwingFXUtils.fromFXImage(wImage, null), "png", f);
+
+			} catch (Exception e) {
+				System.out.println("Save failed");
+				e.printStackTrace();
+			}
+		}
+	}
+
 	@Override
 	public void start(final Stage stage) {
 		borderPane = new BorderPane();
@@ -410,7 +448,7 @@ public class Tree extends Application {
 		borderPane.setRight(stats);
 		borderPane.setBackground(null);
 		scene = new Scene(borderPane, 666, 666, true, SceneAntialiasing.BALANCED);
-		scene.setFill(Color.rgb(255, 255, 255));
+		scene.setFill(Color.rgb(30, 6, 40));
 		stage.setScene(scene);
 		stage.setTitle("Generic Tree");
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("../img/icon.png")));
