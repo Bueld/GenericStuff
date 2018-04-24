@@ -29,7 +29,7 @@ public class Fakultät2 extends Application {
 		output = new Text("Ergebnis:  ");
 		output.setFill(Color.WHITESMOKE);
 		output.setFont(new Font(30));
-		
+
 		calc = new Button("Calculate");
 		calc.setPrefSize(100, 40);
 		calc.setMinWidth(100);
@@ -53,18 +53,18 @@ public class Fakultät2 extends Application {
 			}
 
 		});
-		
+
 		pane = new GridPane();
 		pane.setPadding(new Insets(30));
 		pane.setHgap(20);
 		pane.setVgap(20);
 		pane.setBackground(null);
-		
+
 		pane.add(input, 0, 0);
 		pane.add(calc, 1, 0);
 		pane.add(output, 0, 1);
-		
-		GridPane.setConstraints(output,0,1,2,1);
+
+		GridPane.setConstraints(output, 0, 1, 2, 1);
 	}
 
 	private int check(int i) {
@@ -78,10 +78,10 @@ public class Fakultät2 extends Application {
 	}
 
 	private int fak(int i, int j) {
-
-		if (i > 1) {
-			j = j * (i - 1);
-			return fak(i - 1, j);
+		i--;
+		if (i > 0) {
+			j *= i;
+			return fak(i, j);
 		} else {
 			return j;
 		}
@@ -92,10 +92,10 @@ public class Fakultät2 extends Application {
 		Scene scene = new Scene(pane);
 		scene.setFill(Color.rgb(30, 6, 40));
 		stage.setScene(scene);
-		
+
 		stage.setTitle("Fakultät");
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("../img/icon.png")));
-		
+
 		stage.show();
 	}
 
