@@ -244,7 +244,7 @@ public class Converter extends Application {
 		translatedRects.setPadding(new Insets(12));
 		translatedRects.setHgap(2);
 		translatedRects.setVgap(5);
-
+		
 		translation = new GridPane();
 
 		translation.setVgap(12);
