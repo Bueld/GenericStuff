@@ -7,8 +7,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.effect.Light;
-import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -94,7 +92,7 @@ public class Fakultät2 extends Application {
 		stage.setScene(scene);
 
 		stage.setTitle("Fakultät");
-		stage.getIcons().add(new Image(getClass().getResourceAsStream("../img/icon.png")));
+		stage.getIcons().add(new Image(("img/icon2.png")));
 
 		stage.show();
 	}
