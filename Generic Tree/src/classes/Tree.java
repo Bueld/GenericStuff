@@ -420,6 +420,8 @@ public class Tree extends Application {
 
 		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files (*.PNG)", "*.PNG"));
 		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("png files (*.png)", "*.png"));
+		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("jpg files (*.jpg)", "*.jpg"));
+		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JPG files (*.JPG)", "*.JPG"));
 
 		File f = fChooser.showSaveDialog(null);
 
@@ -431,7 +433,11 @@ public class Tree extends Application {
 
 				WritableImage wImage = g.snapshot(sSP, null);
 
-				ImageIO.write(SwingFXUtils.fromFXImage(wImage, null), "png", f);
+				String str = fChooser.getSelectedExtensionFilter().getDescription().substring(0, 3);
+
+				ImageIO.write(SwingFXUtils.fromFXImage(wImage, null), str, f);
+
+//				System.out.println(str);
 
 			} catch (Exception e) {
 				System.out.println("Save failed");
